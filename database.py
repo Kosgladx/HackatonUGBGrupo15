@@ -5,7 +5,7 @@ def connect_to_database():
         connection = psycopg2.connect(
             host="localhost",
             database="hackaton",
-            port = "5433",
+            port = "5432",
             user="postgres",
             password="z9f4k5ty"
         )
@@ -72,12 +72,7 @@ def adicionar_aluno(cursor, connection, telefone, matricula, nome, periodo, grup
         erro = 2
         grupo = 0
 
-    aluno_exists = execute_query(cursor, "INSERT INTO alunos (telefone, matricula, nome, periodo, grupo, email, erro) VALUES (%s, %s, %s, %s, %s, %s, %s)", (telefone, matricula, nome, periodo, grupo, email, erro))
-    
-    if aluno_exists:
-        print(f"Aluno {nome} já existe, falha no cadastro.")
-        return
-    
+    execute_query(cursor, "INSERT INTO alunos (telefone, matricula, nome, periodo, grupo, email, erro) VALUES (%s, %s, %s, %s, %s, %s, %s)", (telefone, matricula, nome, periodo, grupo, email, erro)) 
     connection.commit()
 
 
