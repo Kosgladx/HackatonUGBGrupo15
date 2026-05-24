@@ -1,0 +1,7 @@
+{
+'nome_grupo_geral':'Teste Final de hoje',
+
+'nome_minigrupo_inicio':'Equipe',
+
+'nome_minigrupo_fim':'Hackaton-2026'
+}
