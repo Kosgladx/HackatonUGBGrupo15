@@ -174,10 +174,10 @@ def analizar_telefones(telefones): # todo o processo de análise dos números, r
             retorno['repetidos'][valores_finais] = retorno['repetidos'][valores_finais] + 1 # Pensando bem eu acho que isso nunca vai acontecer com essa lógica, mas vou deixar aqui assim mesmo.
             
     return retorno
-x = open('dados.txt','r',encoding='utf-8')
-telefones = x.read()
-x.close()
-telefones = eval(telefones)
+
+
+
+# telefones = #recebe do banco de dados.
 print('abra o whatsapp, clique em novo contato, abra um grupo ao lado ou converça com alguém e clique na parte superior para aparecerem os detalhes')
 print('após isso aperte insert para iniciar')
 keyboard.wait('insert')
@@ -189,6 +189,10 @@ mouse.click('left')
 mouse.move(205, 193)
 time.sleep(0.2)
 mouse.click('left')
+
+#dados números enviado para o banco de dados
+#Para enviar os telefones para o banco tem que se retirar os ' ' e o'-', no caso retirar todo e qualquer catacter.
+
 for i in dados_numeros['validos']: # Inserindo os números de telefone no grupo principal
     pyperclip.copy(i)
     time.sleep(0.2)
@@ -235,4 +239,6 @@ mouse.move(256, 614)#Criar o Grupo Central
 time.sleep(0.2)
 mouse.click('left')
 time.sleep(10)
-input('Fim do programa')
+
+
+# grupos =  #recebe os dados dos grupos (números) para fazer o mesmo processo que o feito acima porém com modificações no nome do grupo
