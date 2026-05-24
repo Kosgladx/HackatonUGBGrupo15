@@ -3,6 +3,21 @@ import mouse
 import pyperclip
 import time
 
+import psycopg2
+def listar_telefones_grupos(cursor):
+    grupos = executequery(cursor, "SELECT id,monitor FROM grupos WHERE monitor IS NOT NULL AND id != 0")
+    alunos = [[] for  in range(len(grupos))]
+    for i, grupo in enumerate(grupos):
+        grupo_alunos = execute_query(cursor, "SELECT telefone FROM alunos WHERE grupo = %s", (grupo[0],))
+        alunos[i] = grupo_alunos + [grupo[1]]
+    return alunos
+
+
+def listar_telefones(cursor):
+    return execute_query(cursor, "SELECT telefone FROM alunos ") + execute_query(cursor, "SELECT telefone FROM monitores ")
+
+
+
 def formatar_numero_txt():
     mouse.move(0,0)
     time.sleep(0.2)
@@ -177,11 +192,35 @@ def analizar_telefones(telefones): # todo o processo de análise dos números, r
 
 
 
-# telefones = #recebe do banco de dados.
+telefones = listar_telefones(cursor)
+temp = []
+for i in telefones:
+    temp.append(i[0])
+telefones = temp.copy()
+
 print('abra o whatsapp, clique em novo contato, abra um grupo ao lado ou converça com alguém e clique na parte superior para aparecerem os detalhes')
 print('após isso aperte insert para iniciar')
-keyboard.wait('insert')
+keyboard.wait('insert') # Aqui se inicia a validação dos números
+
 dados_numeros = analizar_telefones(telefones)
+
+for d in dados_numeros['invalidos']: # Envio dos telefones inválidos
+    telefone_final = ""
+    for formatar in d:
+        if formatar in '0123456789':
+            telefone_final+formatar
+    formatar = int(formatar)
+    adicionar_semwhats(connection, cursor, formatar)
+
+for r in dados_numeros['repetidos']: # Envio dos telefones repetidos
+    telefone_final = ""
+    for formatar in r:
+        if formatar in '0123456789':
+            telefone_final+formatar
+    formatar = int(formatar)
+    adicionar_semwhats(connection, cursor, formatar)
+
+    
 print(dados_numeros) # dados_numeros contém todos os números válidos, repetidos e inválidos separados.
 mouse.move(88, 61)
 time.sleep(0.2)
@@ -240,5 +279,6 @@ time.sleep(0.2)
 mouse.click('left')
 time.sleep(10)
 
-
-# grupos =  #recebe os dados dos grupos (números) para fazer o mesmo processo que o feito acima porém com modificações no nome do grupo
+input('Ponto do fim da funcionalidade')
+#grupos = telefones =listar_telefones_grupos(cursor) #recebe os dados dos grupos (números) para fazer o mesmo processo que o feito acima porém com modificações no nome do grupo
+#for g in grupos:
