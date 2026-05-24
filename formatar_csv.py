@@ -1,3 +1,4 @@
+#import psycopg2
 x = open('Hackathon - Respostas ao formulário 1.csv','r',encoding='utf-8')
 z = x.read()
 x.close()
@@ -31,18 +32,60 @@ for i in z:
              if i not in '0123456789':
                  pass
              else:
-                 telefone_final = telefone_final + i
+                 telefone_final = telefone_final + i #alunos comuns
             Alunos_Comuns.append({'email':temp[1],'nome':temp[2],'matricula':temp[3],'telefone':temp[4],'periodo':temp[5],'matriculalider':temp[6],'senha':temp[7]})
         else:
+            Sem_Grupo.append({'email':temp[1],'nome':temp[2],'matricula':temp[3],'telefone':temp[4],'periodo':temp[5],'matriculalider':0,'senha':0})
          
 
 
     else:
         pass#print('incomum',len(temp))
 #[[],[],[]]
- 
-print(lideres)
-print('\n\n\n')
-print(Alunos_Comuns)
+
+
+x = open('Hackathon_Monitor - Respostas ao formulário 1.csv','r',encoding='utf-8')
+z = x.read()
+x.close()
+z = z.split('\n')
+for i in range(0,1):
+    z.pop(0)
+
+#print(z)
+
+for i in z:
+
+    temp = i.split(',')
+    temp2 = i.split(',')
+    temp2.pop(0)
+    temp2.pop(0)
+    temp2.pop(0)
+    temp2.pop(0)
+    temp3 = []
+    for i in temp2[0]:
+        if i in '0123456789':
+            temp3.append(int(i))
+    telefone = temp[3]
+    telefone_final = '' 
+    for i in telefone:
+     if i not in '0123456789':
+         pass
+     else:
+         telefone_final = telefone_final + i
+    Monitores.append({'email':temp[1],'nome':temp[2],'telefone':telefone_final,'experiencia':temp3})
+
+#print(Monitores,Alunos_Comuns,Sem_Grupo)
+#input()
+for m in Monitores:
+    adicionar_monitor(cursor, connection, m['telefone'], m['experiencia'], m['nome'], m['email'])
+
+for a in Alunos_Comuns:
+    adicionar_aluno(cursor, connection, a['telefone'], a['matricula'], a['nome'], a['periodo'], a['matriculalider'], a['senha'], a['email'])
+
+for sg in Sem_Grupo:
+    adicionar_aluno(cursor, connection, sg['telefone'], sg['matricula'], sg['nome'], sg['periodo'], sg['matriculalider'], sg['senha'], sg['email'])
+
+
+    
 
 
