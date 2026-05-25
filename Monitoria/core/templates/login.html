@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Login</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            font-family: Arial, sans-serif;
+            background:#dfe6ee; /* mesmo tom do cadastro */
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            min-height:100vh;
+            padding:30px;
+        }
+
+        .container{
+            background:white;
+            width:420px;
+            padding:40px;
+            border-radius:24px;
+            box-shadow:0 10px 30px rgba(0,0,0,0.12);
+        }
+
+        h1{
+            text-align:center;
+            color:#1f2f4a;
+            font-size:36px;
+            margin-bottom:10px;
+        }
+
+        .subtitle{
+            text-align:center;
+            color:#6b7280;
+            margin-bottom:30px;
+            font-size:15px;
+        }
+
+        input{
+            width:100%;
+            padding:16px;
+            margin-bottom:18px;
+
+            border:1px solid #d1d5db; /* 👈 borda visível */
+            border-radius:14px;
+
+            background:#f9fafb;
+            font-size:15px;
+            transition:0.2s;
+        }
+
+        input:focus{
+            outline:none;
+            background:white;
+            border-color:#2563eb;
+            box-shadow:0 0 0 3px rgba(37,99,235,0.15);
+        }
+
+        button{
+            width:100%;
+            padding:16px;
+            border:none;
+            border-radius:14px;
+            background:#2563eb;
+            color:white;
+            font-size:17px;
+            font-weight:bold;
+            cursor:pointer;
+            transition:0.3s;
+        }
+
+        button:hover{
+            background:#1d4ed8;
+            transform:translateY(-2px);
+        }
+
+        .erro{
+            background:#ef4444;
+            color:white;
+            padding:14px;
+            border-radius:12px;
+            margin-bottom:20px;
+            text-align:center;
+            font-weight:bold;
+        }
+
+        .footer{
+            text-align:center;
+            margin-top:25px;
+            color:#6b7280;
+            font-size:14px;
+        }
+
+    </style>
+
+</head>
+<body>
+
+    <div class="container">
+
+        <h1>Login</h1>
+
+        <p class="subtitle">Entre no sistema de monitoria</p>
+
+        {% if erro %}
+            <div class="erro">{{ erro }}</div>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <input
+                type="text"
+                name="matricula"
+                placeholder="Matrícula"
+                required
+            >
+
+            <input
+                type="password"
+                name="senha"
+                placeholder="Senha"
+                required
+            >
+
+            <button type="submit">Entrar</button>
+
+        </form>
+
+        <div class="footer">
+            Sistema de Gerenciamento de Monitoria
+        </div>
+
+    </div>
+
+</body>
+</html>

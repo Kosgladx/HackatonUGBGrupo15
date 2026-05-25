@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Usuários</title>
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+
+            font-family: Arial, sans-serif;
+
+            background:#eef1f5;
+
+            padding:40px;
+        }
+
+        h1{
+
+            color:#1f2f4a;
+
+            margin-bottom:30px;
+
+            font-size:36px;
+
+            font-weight:bold;
+        }
+
+        .usuarios-container{
+
+            display:grid;
+
+            grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));
+
+            gap:25px;
+        }
+
+        .card{
+
+            background:white;
+
+            border-radius:20px;
+
+            padding:25px;
+
+            box-shadow:0 4px 12px rgba(0,0,0,0.08);
+
+            transition:0.3s;
+
+            border-top:8px solid #2563eb;
+        }
+
+        .card:hover{
+
+            transform:translateY(-5px);
+
+            box-shadow:0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .nome{
+
+            color:#1f2f4a;
+
+            font-size:24px;
+
+            font-weight:bold;
+
+            margin-bottom:15px;
+        }
+
+        .info{
+
+            margin-bottom:10px;
+
+            color:#4b5563;
+
+            font-size:16px;
+
+            line-height:1.5;
+        }
+
+        .label{
+
+            font-weight:bold;
+
+            color:#111827;
+        }
+
+        .tipo{
+
+            display:inline-block;
+
+            margin-top:15px;
+
+            padding:8px 14px;
+
+            border-radius:999px;
+
+            font-size:14px;
+
+            font-weight:bold;
+
+            color:white;
+        }
+
+        .monitor{
+
+            background:#00c853;
+        }
+
+        .integrante{
+
+            background:#2563eb;
+        }
+
+    </style>
+
+</head>
+<body>
+
+    <h1>Usuários Cadastrados</h1>
+
+    <div class="usuarios-container">
+
+        {% for usuario in usuarios %}
+
+            <div class="card">
+
+                <div class="nome">
+                    {{ usuario.nome }}
+                </div>
+
+                <div class="info">
+
+                    <span class="label">
+                        Matrícula:
+                    </span>
+
+                    {{ usuario.matricula }}
+
+                </div>
+
+                <div class="info">
+
+                    <span class="label">
+                        Período:
+                    </span>
+
+                    {{ usuario.periodo }}
+
+                </div>
+
+                <div class="info">
+
+                    <span class="label">
+                        Email:
+                    </span>
+
+                    {{ usuario.email }}
+
+                </div>
+
+                <div class="info">
+
+                    <span class="label">
+                        Telefone:
+                    </span>
+
+                    {{ usuario.telefone }}
+
+                </div>
+
+                {% if usuario.tipo == 'monitor' %}
+
+                    <span class="tipo monitor">
+
+                        Monitor
+
+                    </span>
+
+                {% else %}
+
+                    <span class="tipo integrante">
+
+                        Integrante
+
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+</body>
+</html>
