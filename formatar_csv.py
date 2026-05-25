@@ -91,32 +91,45 @@ for sg in Sem_Grupo:
 
 def aleatorizar_lista(lista):
     lista = lista
-    tista2 = []
+    lista2 = []
     while len(lista)!=0:
-        z = random.randint(0,len(lista1)-1)
+        if len(lista) > 1:
+            z = random.randint(0,len(lista)-1)
+        else:
+            z = 0 
         lista2.append(lista[z])
         lista.pop(z)
+    lista = lista2.copy()
+    return lista2
+        
         
 for l in lideres:
     objetivo = l['periodo']
     atingido = False
     possibilidade = False
-    aleatorizar_lista(Monitores)
+    Monitores = aleatorizar_lista(Monitores)
     while atingido == False:
         for m in Monitores:
             if objetivo in m:
-                adicionar_lider(cursor, connection, l['telefone'], l['matricula'], l['nome'], l['periodo'], l['matriculalider'], l['senha'], l['email'], m['telefone'])
+                database.adicionar_lider(cursor, connection, l['telefone'], l['matricula'], l['nome'], l['periodo'], l['matriculalider'], l['senha'], l['email'], m['telefone'])
                 possibilidade = True
-                objetivo = True
+                atingido = True
                 break
 
-        if possibilidade = False:
-            aleatorizar_lista(Monitores)
-            escolhido = Monitores[random.randint(0,len(Monitores)-1)]
-            adicionar_lider(cursor, connection, l['telefone'], l['matricula'], l['nome'], l['periodo'], l['matriculalider'], l['senha'], l['email'], escolhido['telefone'])
+        if possibilidade == False:
+            Monitores = aleatorizar_lista(Monitores)
+            if len(Monitores) > 1:
+                escolhido = Monitores[random.randint(0,len(Monitores)-1)]
+            else:
+                escolhido = Monitores[0]
+            database.adicionar_lider(cursor, connection, l['telefone'], l['matricula'], l['nome'], l['periodo'], l['matriculalider'], l['senha'], l['email'], escolhido['telefone'])
             possibilidade = True
-            objetivo = True         
-            
-                
+            atingido = True
 
-
+           
+#listaprint = database.listar_monitores(cursor)
+#print(listaprint)
+#listaprint = database.listar_grupos(cursor)
+#print(listaprint)
+#listaprint = database.listar_alunos(cursor)
+#print(listaprint)
