@@ -2,19 +2,21 @@ import keyboard
 import mouse
 import pyperclip
 import time
+import database
 
-import psycopg2
+connection, cursor = database.connect_to_database()
+
 def listar_telefones_grupos(cursor):
-    grupos = executequery(cursor, "SELECT id,monitor FROM grupos WHERE monitor IS NOT NULL AND id != 0")
-    alunos = [[] for  in range(len(grupos))]
+    grupos = database.execute_query(cursor, "SELECT id,monitor FROM grupos WHERE monitor IS NOT NULL AND id != 0")
+    alunos = [[] for _ in range(len(grupos))]
     for i, grupo in enumerate(grupos):
-        grupo_alunos = execute_query(cursor, "SELECT telefone FROM alunos WHERE grupo = %s", (grupo[0],))
+        grupo_alunos = database.execute_query(cursor, "SELECT telefone FROM alunos WHERE grupo = %s", (grupo[0],))
         alunos[i] = grupo_alunos + [grupo[1]]
     return alunos
 
 
 def listar_telefones(cursor):
-    return execute_query(cursor, "SELECT telefone FROM alunos ") + execute_query(cursor, "SELECT telefone FROM monitores ")
+    return database.execute_query(cursor, "SELECT telefone FROM alunos ") + database.execute_query(cursor, "SELECT telefone FROM monitores ")
 
 
 
@@ -198,6 +200,8 @@ for i in telefones:
     temp.append(i[0])
 telefones = temp.copy()
 
+print(telefones)
+
 print('abra o whatsapp, clique em novo contato, abra um grupo ao lado ou converça com alguém e clique na parte superior para aparecerem os detalhes')
 print('após isso aperte insert para iniciar')
 keyboard.wait('insert') # Aqui se inicia a validação dos números
@@ -210,7 +214,7 @@ for d in dados_numeros['invalidos']: # Envio dos telefones inválidos
         if formatar in '0123456789':
             telefone_final+formatar
     formatar = int(formatar)
-    adicionar_semwhats(connection, cursor, formatar)
+    database.adicionar_semwhats(connection, cursor, formatar)
 
 for r in dados_numeros['repetidos']: # Envio dos telefones repetidos
     telefone_final = ""
@@ -218,7 +222,7 @@ for r in dados_numeros['repetidos']: # Envio dos telefones repetidos
         if formatar in '0123456789':
             telefone_final+formatar
     formatar = int(formatar)
-    adicionar_semwhats(connection, cursor, formatar)
+    database.adicionar_semwhats(connection, cursor, formatar)
 
     
 print(dados_numeros) # dados_numeros contém todos os números válidos, repetidos e inválidos separados.
