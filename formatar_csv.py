@@ -1,4 +1,5 @@
 #import psycopg2
+import database
 x = open('Hackathon - Respostas ao formulário 1.csv','r',encoding='utf-8')
 z = x.read()
 x.close()
@@ -10,6 +11,8 @@ lideres = []# tem email,nome,matrícula,telefone,periodo,matriculalider,senha
 Alunos_Comuns = []# tem email,nome,matrícula,telefone,periodo,matriculalider,senha
 Sem_Grupo = []# tem email,nome,matrícula,telefone,periodo
 Monitores = []
+
+connection, cursor = database.connect_to_database()
 
 for i in z:
     temp = i.split(',')
@@ -77,13 +80,13 @@ for i in z:
 #print(Monitores,Alunos_Comuns,Sem_Grupo)
 #input()
 for m in Monitores:
-    adicionar_monitor(cursor, connection, m['telefone'], m['experiencia'], m['nome'], m['email'])
+    database.adicionar_monitor(cursor, connection, m['telefone'], m['experiencia'], m['nome'], m['email'])
 
 for a in Alunos_Comuns:
-    adicionar_aluno(cursor, connection, a['telefone'], a['matricula'], a['nome'], a['periodo'], a['matriculalider'], a['senha'], a['email'])
+    database.adicionar_aluno(cursor, connection, a['telefone'], a['matricula'], a['nome'], a['periodo'], a['matriculalider'], a['senha'], a['email'])
 
 for sg in Sem_Grupo:
-    adicionar_aluno(cursor, connection, sg['telefone'], sg['matricula'], sg['nome'], sg['periodo'], sg['matriculalider'], sg['senha'], sg['email'])
+    database.adicionar_aluno(cursor, connection, sg['telefone'], sg['matricula'], sg['nome'], sg['periodo'], sg['matriculalider'], sg['senha'], sg['email'])
 
 
     
