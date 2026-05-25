@@ -13,21 +13,24 @@ def home(request):
 
         grupo = None
 
-        if grupo_id != 'sem_grupo':
+        # 🔥 CORREÇÃO PRINCIPAL (EVITA CRASH)
+        if grupo_id and grupo_id != 'sem_grupo':
+            try:
+                grupo = Grupo.objects.get(id=grupo_id)
+            except Grupo.DoesNotExist:
+                grupo = None
 
-            grupo = Grupo.objects.get(id=grupo_id)
+            if grupo:
+                quantidade = Usuario.objects.filter(
+                    grupo=grupo,
+                    tipo='integrante'
+                ).count()
 
-            quantidade = Usuario.objects.filter(
-                grupo=grupo,
-                tipo='integrante'
-            ).count()
-
-            if quantidade >= 5:
-
-                return render(request, 'index.html', {
-                    'grupos': grupos,
-                    'erro': 'Esse grupo já possui 5 integrantes.'
-                })
+                if quantidade >= 5:
+                    return render(request, 'index.html', {
+                        'grupos': grupos,
+                        'erro': 'Esse grupo já possui 5 integrantes.'
+                    })
 
         usuario = Usuario(
             username=request.POST.get('matricula'),
@@ -178,7 +181,6 @@ def remover_integrante(request, usuario_id):
     return redirect('/monitor')
 
 
-# ✅ SALVAR WHATSAPP (CORRIGIDO)
 def salvar_whatsapp(request, grupo_id):
 
     if request.method == "POST":
