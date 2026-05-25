@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel do Monitor</title>
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body{
+            font-family: Arial, sans-serif;
+            background:#eef1f5;
+            padding:40px;
+        }
+
+        h1{
+            color:#1f2f4a;
+            margin-bottom:35px;
+            font-size:38px;
+            font-weight:bold;
+        }
+
+        .box{
+            background:white;
+            padding:30px;
+            border-radius:24px;
+            margin-bottom:30px;
+            box-shadow:0 8px 25px rgba(0,0,0,0.08);
+        }
+
+        .section-title{
+            color:#1f2f4a;
+            font-size:28px;
+            margin-bottom:25px;
+        }
+
+        /* ── Meus Grupos ── NOVO DESIGN: cards com rows de nomes à direita */
+        .grupo-card{
+            border:1px solid #e5e7eb;
+            border-radius:20px;
+            margin-bottom:20px;
+            overflow:hidden;
+        }
+
+        .grupo-card-header{
+            background:#2563eb;
+            padding:16px 22px;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+        }
+
+        .grupo-card-titulo{
+            color:white;
+            font-size:20px;
+            font-weight:bold;
+        }
+
+        .grupo-card-contador{
+            background:rgba(255,255,255,0.2);
+            color:white;
+            padding:5px 14px;
+            border-radius:999px;
+            font-size:13px;
+            font-weight:bold;
+        }
+
+        .grupo-card-body{
+            padding:0;
+        }
+
+        .grupo-card-actions{
+            padding:14px 22px;
+            background:#f8fafc;
+            border-bottom:1px solid #f1f5f9;
+        }
+
+        /* ── Rows de integrantes ── */
+        .integrante-row{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            padding:14px 22px;
+            border-bottom:1px solid #f1f5f9;
+            transition:background 0.15s;
+        }
+
+        .integrante-row:last-child{
+            border-bottom:none;
+        }
+
+        .integrante-row:hover{
+            background:#f8fafc;
+        }
+
+        .integrante-left{
+            display:flex;
+            align-items:center;
+            gap:14px;
+        }
+
+        .avatar{
+            width:40px;
+            height:40px;
+            border-radius:50%;
+            background:#dbeafe;
+            color:#1d4ed8;
+            font-size:16px;
+            font-weight:bold;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            flex-shrink:0;
+        }
+
+        .integrante-nome{
+            font-weight:bold;
+            font-size:15px;
+            color:#111827;
+            margin-bottom:2px;
+        }
+
+        .integrante-info{
+            font-size:13px;
+            color:#6b7280;
+        }
+
+        .integrante-right{
+            display:flex;
+            align-items:center;
+            gap:10px;
+        }
+
+        .telefone-pill{
+            background:#f3f4f6;
+            color:#374151;
+            padding:5px 12px;
+            border-radius:999px;
+            font-size:13px;
+        }
+
+        .btn-remover{
+            padding:7px 14px;
+            border:none;
+            border-radius:10px;
+            background:#fee2e2;
+            color:#dc2626;
+            font-size:13px;
+            font-weight:bold;
+            cursor:pointer;
+            transition:0.2s;
+            white-space:nowrap;
+        }
+
+        .btn-remover:hover{
+            background:#fecaca;
+        }
+
+        .btn-sair{
+            padding:8px 16px;
+            border:none;
+            border-radius:12px;
+            background:#374151;
+            color:white;
+            font-size:13px;
+            font-weight:bold;
+            cursor:pointer;
+            transition:0.2s;
+        }
+
+        .btn-sair:hover{
+            background:#1f2937;
+        }
+
+        .empty-row{
+            padding:20px 22px;
+            color:#9ca3af;
+            font-size:15px;
+            font-style:italic;
+        }
+
+        /* ── Grupos sem monitor ── */
+        .membro{
+            background:#f8fafc;
+            padding:20px;
+            border-radius:18px;
+            margin-bottom:18px;
+            transition:0.3s;
+            border-left:6px solid #00c853;
+        }
+
+        .membro:hover{
+            transform:translateY(-3px);
+            box-shadow:0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        .grupo-title{
+            color:#1f2f4a;
+            font-size:22px;
+            margin-bottom:10px;
+        }
+
+        .info{
+            color:#4b5563;
+            font-size:15px;
+            line-height:1.7;
+        }
+
+        .btn-monitor{
+            padding:10px 18px;
+            border:none;
+            border-radius:12px;
+            background:#00c853;
+            color:white;
+            font-weight:bold;
+            cursor:pointer;
+            transition:0.3s;
+            margin-top:14px;
+            font-size:14px;
+        }
+
+        .btn-monitor:hover{
+            background:#00b548;
+            transform:translateY(-2px);
+        }
+
+        /* ── Integrantes sem grupo ── */
+        .sem-grupo-row{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            padding:14px 18px;
+            border-radius:14px;
+            margin-bottom:12px;
+            background:#fffbeb;
+            border:1px solid #fde68a;
+            border-left:5px solid #f59e0b;
+            gap:12px;
+            flex-wrap:wrap;
+        }
+
+        .sem-grupo-info{
+            display:flex;
+            align-items:center;
+            gap:14px;
+        }
+
+        .avatar-amber{
+            width:40px;
+            height:40px;
+            border-radius:50%;
+            background:#fde68a;
+            color:#92400e;
+            font-size:16px;
+            font-weight:bold;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            flex-shrink:0;
+        }
+
+        .sem-grupo-nome{
+            font-weight:bold;
+            font-size:15px;
+            color:#111827;
+            margin-bottom:2px;
+        }
+
+        .sem-grupo-detalhe{
+            font-size:13px;
+            color:#6b7280;
+        }
+
+        .btn-add{
+            padding:8px 14px;
+            border:none;
+            border-radius:10px;
+            background:#2563eb;
+            color:white;
+            font-size:13px;
+            font-weight:bold;
+            cursor:pointer;
+            transition:0.2s;
+            white-space:nowrap;
+        }
+
+        .btn-add:hover{
+            background:#1d4ed8;
+        }
+
+        .btns-grupo{
+            display:flex;
+            gap:8px;
+            flex-wrap:wrap;
+        }
+
+        .empty{
+            color:#9ca3af;
+            font-size:15px;
+            font-style:italic;
+        }
+
+        hr{
+            border:none;
+            height:1px;
+            background:#e5e7eb;
+            margin:16px 0;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Painel do Monitor</h1>
+
+    <!-- MEUS GRUPOS -->
+    <div class="box">
+
+        <h2 class="section-title">Meus Grupos</h2>
+
+        {% for grupo in meus_grupos %}
+
+            <div class="grupo-card">
+
+                <div class="grupo-card-header">
+                    <span class="grupo-card-titulo">Grupo {{ grupo.numero }}</span>
+                    <span class="grupo-card-contador">
+                        {{ grupo.contagem_integrantes }}/5 integrantes
+                    </span>
+                </div>
+
+                <div class="grupo-card-body">
+
+                    <div class="grupo-card-actions">
+                        <a href="/sair-grupo/{{ grupo.id }}/">
+                            <button class="btn-sair">Sair do Grupo</button>
+                        </a>
+                    </div>
+
+                    {% for usuario in grupo.usuario_set.all|dictsort:"nome" %}
+
+                        {% if usuario.tipo == 'integrante' %}
+
+                            <div class="integrante-row">
+
+                                <div class="integrante-left">
+
+                                    <div class="avatar">
+                                        {{ usuario.nome|first|upper }}
+                                    </div>
+
+                                    <div>
+                                        <div class="integrante-nome">{{ usuario.nome }}</div>
+                                        <div class="integrante-info">Matrícula: {{ usuario.matricula }} · {{ usuario.periodo }}º período</div>
+                                    </div>
+
+                                </div>
+
+                                <div class="integrante-right">
+                                    <span class="telefone-pill">📞 {{ usuario.telefone }}</span>
+                                    <a href="/remover-integrante/{{ usuario.id }}/">
+                                        <button class="btn-remover">Remover</button>
+                                    </a>
+                                </div>
+
+                            </div>
+
+                        {% endif %}
+
+                    {% empty %}
+
+                        <div class="empty-row">Nenhum integrante no grupo ainda.</div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        {% empty %}
+
+            <p class="empty">Você ainda não possui grupos.</p>
+
+        {% endfor %}
+
+    </div>
+
+    <!-- GRUPOS SEM MONITOR -->
+    <div class="box">
+
+        <h2 class="section-title">Grupos sem monitor</h2>
+
+        {% for grupo in grupos_sem_monitor %}
+
+            <div class="membro">
+
+                <h3 class="grupo-title">Grupo {{ grupo.numero }}</h3>
+
+                <div class="info">
+                    <strong>Integrantes:</strong><br><br>
+
+                    {% for usuario in grupo.usuario_set.all|dictsort:"nome" %}
+
+                        {% if usuario.tipo == 'integrante' %}
+                            • {{ usuario.nome }} ({{ usuario.matricula }})<br>
+                        {% endif %}
+
+                    {% empty %}
+                        Nenhum integrante no grupo.
+                    {% endfor %}
+
+                </div>
+
+                <a href="/entrar-grupo/{{ grupo.id }}/">
+                    <button class="btn-monitor">Tornar-se monitor</button>
+                </a>
+
+            </div>
+
+        {% empty %}
+
+            <p class="empty">Todos os grupos possuem monitor.</p>
+
+        {% endfor %}
+
+    </div>
+
+    <!-- INTEGRANTES SEM GRUPO -->
+    <div class="box">
+
+        <h2 class="section-title">Integrantes sem grupo</h2>
+
+        {% for usuario in integrantes_sem_grupo %}
+
+            <div class="sem-grupo-row">
+
+                <div class="sem-grupo-info">
+
+                    <div class="avatar-amber">
+                        {{ usuario.nome|first|upper }}
+                    </div>
+
+                    <div>
+                        <div class="sem-grupo-nome">{{ usuario.nome }}</div>
+                        <div class="sem-grupo-detalhe">Matrícula: {{ usuario.matricula }} · Telefone: {{ usuario.telefone }}</div>
+                    </div>
+
+                </div>
+
+                <div class="btns-grupo">
+                    {% for grupo in meus_grupos %}
+                        <a href="/adicionar-integrante/{{ usuario.id }}/{{ grupo.id }}/">
+                            <button class="btn-add">Adicionar ao Grupo {{ grupo.numero }}</button>
+                        </a>
+                    {% endfor %}
+                </div>
+
+            </div>
+
+        {% empty %}
+
+            <p class="empty">Todos os integrantes possuem grupo.</p>
+
+        {% endfor %}
+
+    </div>
+
+</body>
+</html>
