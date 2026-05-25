@@ -1,5 +1,6 @@
 #import psycopg2
 import database
+import random
 x = open('Hackathon - Respostas ao formulário 1.csv','r',encoding='utf-8')
 z = x.read()
 x.close()
@@ -88,7 +89,34 @@ for a in Alunos_Comuns:
 for sg in Sem_Grupo:
     database.adicionar_aluno(cursor, connection, sg['telefone'], sg['matricula'], sg['nome'], sg['periodo'], sg['matriculalider'], sg['senha'], sg['email'])
 
+def aleatorizar_lista(lista):
+    lista = lista
+    tista2 = []
+    while len(lista)!=0:
+        z = random.randint(0,len(lista1)-1)
+        lista2.append(lista[z])
+        lista.pop(z)
+        
+for l in lideres:
+    objetivo = l['periodo']
+    atingido = False
+    possibilidade = False
+    aleatorizar_lista(Monitores)
+    while atingido == False:
+        for m in Monitores:
+            if objetivo in m:
+                adicionar_lider(cursor, connection, l['telefone'], l['matricula'], l['nome'], l['periodo'], l['matriculalider'], l['senha'], l['email'], m['telefone'])
+                possibilidade = True
+                objetivo = True
+                break
 
-    
+        if possibilidade = False:
+            aleatorizar_lista(Monitores)
+            escolhido = Monitores[random.randint(0,len(Monitores)-1)]
+            adicionar_lider(cursor, connection, l['telefone'], l['matricula'], l['nome'], l['periodo'], l['matriculalider'], l['senha'], l['email'], escolhido['telefone'])
+            possibilidade = True
+            objetivo = True         
+            
+                
 
 
