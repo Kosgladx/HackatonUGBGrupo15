@@ -27,7 +27,7 @@ for i in z:
              else:
                  telefone_final = telefone_final + i
                 
-            lideres.append({'email':temp[1],'nome':temp[2],'matricula':temp[3],'telefone':temp[4],'periodo':temp[5],'matriculalider':temp[6],'senha':temp[7]})
+            lideres.append({'email':temp[1],'nome':temp[2],'matricula':temp[3],'telefone':temp[4],'periodo':temp[5],'matriculalider':temp[7],'senha':temp[8]})
         elif temp[6] == "Sim (integrante do grupo)":
             telefone = temp[4]
             telefone_final = '' 
@@ -36,7 +36,7 @@ for i in z:
                  pass
              else:
                  telefone_final = telefone_final + i #alunos comuns
-            Alunos_Comuns.append({'email':temp[1],'nome':temp[2],'matricula':temp[3],'telefone':temp[4],'periodo':temp[5],'matriculalider':temp[6],'senha':temp[7]})
+            Alunos_Comuns.append({'email':temp[1],'nome':temp[2],'matricula':temp[3],'telefone':temp[4],'periodo':temp[5],'matriculalider':temp[7],'senha':temp[8]})
         else:
             Sem_Grupo.append({'email':temp[1],'nome':temp[2],'matricula':temp[3],'telefone':temp[4],'periodo':temp[5],'matriculalider':0,'senha':0})
          
