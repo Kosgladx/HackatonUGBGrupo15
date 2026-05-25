@@ -126,10 +126,15 @@ for l in lideres:
             possibilidade = True
             atingido = True
 
-           
-#listaprint = database.listar_monitores(cursor)
-#print(listaprint)
-#listaprint = database.listar_grupos(cursor)
-#print(listaprint)
-#listaprint = database.listar_alunos(cursor)
-#print(listaprint)
+for a in Alunos_Comuns:
+    database.adicionar_aluno(cursor, connection, a['telefone'], a['matricula'], a['nome'], a['periodo'], a['matriculalider'], a['senha'], a['email'])
+
+for sg in Sem_Grupo:
+    database.adicionar_aluno(cursor, connection, sg['telefone'], sg['matricula'], sg['nome'], sg['periodo'], sg['matriculalider'], sg['senha'], sg['email'])           
+
+listaprint = database.listar_monitores(cursor)
+print(listaprint)
+listaprint = database.listar_grupos(cursor)
+print(listaprint)
+listaprint = database.listar_alunos(cursor)
+print(listaprint)
