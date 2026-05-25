@@ -213,7 +213,7 @@ for d in dados_numeros['invalidos']: # Envio dos telefones inválidos
     for formatar in d:
         if formatar in '0123456789':
             telefone_final+formatar
-    formatar = int(formatar)
+    formatar = telefone_final
     database.adicionar_semwhats(connection, cursor, formatar)
 
 for r in dados_numeros['repetidos']: # Envio dos telefones repetidos
@@ -221,7 +221,7 @@ for r in dados_numeros['repetidos']: # Envio dos telefones repetidos
     for formatar in r:
         if formatar in '0123456789':
             telefone_final+formatar
-    formatar = int(formatar)
+    formatar = telefone_final
     database.adicionar_semwhats(connection, cursor, formatar)
 
     
