@@ -284,5 +284,22 @@ mouse.click('left')
 time.sleep(10)
 
 input('Ponto do fim da funcionalidade')
-#grupos = telefones =listar_telefones_grupos(cursor) #recebe os dados dos grupos (números) para fazer o mesmo processo que o feito acima porém com modificações no nome do grupo
-#for g in grupos:
+grupos =listar_telefones_grupos(cursor) #recebe os dados dos grupos (números) para fazer o mesmo processo que o feito acima porém com modificações no nome do grupo
+for g in grupos:
+    Validos = []
+    for V in range(0,len(g)):
+        if V == len(g) - 1:
+            Validos.append(g[v])
+        else:
+            Validos.append(g[V][1])
+    print(Validos)
+    input('PARE')
+    for i in range(0,len)
+    mouse.move(401, 64)
+    time.sleep(0.2)
+    mouse.click('left')
+    time.sleep(0.2)
+    mouse.move(248, 188)
+    time.sleep(0.2)
+    mouse.click('left')
+    time.sleep(0.2)
