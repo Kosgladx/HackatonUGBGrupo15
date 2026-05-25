@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Painel</title>
+
     <style>
 
         *{
@@ -53,7 +54,7 @@
             margin-bottom:25px;
         }
 
-        /* ── Monitor card ── ATUALIZADO: fundo escuro trocado por borda lateral colorida */
+        /* ── Monitor ── */
         .monitor{
             background:#f0fdf4;
             border:1px solid #86efac;
@@ -61,56 +62,20 @@
             padding:16px 18px;
             border-radius:14px;
             margin-bottom:15px;
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
-            gap:12px;
-        }
-
-        .monitor-left{
-            display:flex;
-            align-items:center;
-            gap:14px;
-        }
-
-        .monitor-avatar{
-            width:46px;
-            height:46px;
-            background:#16a34a;
-            border-radius:50%;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            color:white;
-            font-size:20px;
-            font-weight:bold;
-            flex-shrink:0;
         }
 
         .monitor-nome{
             font-size:17px;
             font-weight:bold;
             color:#14532d;
-            margin-bottom:4px;
         }
 
         .monitor-info{
             font-size:13px;
             color:#166534;
-            line-height:1.6;
         }
 
-        .monitor-badge{
-            background:#16a34a;
-            color:white;
-            padding:6px 14px;
-            border-radius:999px;
-            font-size:13px;
-            font-weight:bold;
-            white-space:nowrap;
-            flex-shrink:0;
-        }
-
+        /* ── Integrantes ── */
         .membro{
             background:white;
             padding:15px;
@@ -136,7 +101,48 @@
             margin-top:15px;
         }
 
-        /* ── Sem grupo — dois blocos separados ── */
+        /* ── WhatsApp READ ONLY ── */
+        .whatsapp-dropdown{
+            margin-top: 14px;
+        }
+
+        .whatsapp-btn{
+            background:#25D366;
+            color:white;
+            border:none;
+            padding:10px 14px;
+            border-radius:12px;
+            font-weight:bold;
+            cursor:pointer;
+            transition:0.2s;
+        }
+
+        .whatsapp-btn:hover{
+            background:#1ebe5d;
+            transform:translateY(-2px);
+        }
+
+        .whatsapp-content{
+            display:none;
+            margin-top:10px;
+            background:#f0fdf4;
+            border:1px solid #bbf7d0;
+            padding:12px;
+            border-radius:12px;
+        }
+
+        .whatsapp-content a{
+            color:#166534;
+            font-weight:bold;
+            text-decoration:none;
+        }
+
+        .whatsapp-empty{
+            color:#6b7280;
+            font-size:13px;
+        }
+
+        /* ── Sem grupo ── */
         .sem-grupo-grid{
             display:grid;
             grid-template-columns:1fr 1fr;
@@ -147,15 +153,14 @@
             padding:24px;
             border-radius:24px;
             box-shadow:0 8px 25px rgba(0,0,0,0.08);
+            background:white;
         }
 
         .sem-grupo-integrante{
-            background:white;
             border-left:6px solid #f59e0b;
         }
 
         .sem-grupo-monitor{
-            background:white;
             border-left:6px solid #a855f7;
         }
 
@@ -163,26 +168,6 @@
             color:#1f2f4a;
             font-size:20px;
             margin-bottom:16px;
-            display:flex;
-            align-items:center;
-            gap:8px;
-        }
-
-        .sg-badge{
-            font-size:12px;
-            padding:3px 10px;
-            border-radius:999px;
-            font-weight:bold;
-        }
-
-        .sg-badge-integrante{
-            background:#fef3c7;
-            color:#92400e;
-        }
-
-        .sg-badge-monitor{
-            background:#f3e8ff;
-            color:#6b21a8;
         }
 
         .sg-item{
@@ -191,9 +176,6 @@
             margin-bottom:8px;
             font-size:15px;
             color:#374151;
-            display:flex;
-            align-items:center;
-            gap:8px;
         }
 
         .sg-item-integrante{
@@ -206,22 +188,6 @@
             border:1px solid #e9d5ff;
         }
 
-        .sg-dot-integrante{
-            width:8px;
-            height:8px;
-            background:#f59e0b;
-            border-radius:50%;
-            flex-shrink:0;
-        }
-
-        .sg-dot-monitor{
-            width:8px;
-            height:8px;
-            background:#a855f7;
-            border-radius:50%;
-            flex-shrink:0;
-        }
-
         .empty{
             color:#6b7280;
             font-size:15px;
@@ -229,129 +195,139 @@
 
     </style>
 </head>
+
 <body>
 
-    <h1>Painel de Grupos</h1>
+<h1>Painel de Grupos</h1>
 
-    <div class="box">
+<!-- GRUPOS -->
+<div class="box">
 
-        {% for grupo in grupos %}
+    {% for grupo in grupos %}
 
-            <div class="grupo">
+        <div class="grupo">
 
-                <h2 class="section-title">
-                    Grupo {{ grupo.numero }}
-                </h2>
+            <h2 class="section-title">Grupo {{ grupo.numero }}</h2>
 
-                <!-- MONITOR -->
-                {% for usuario in usuarios %}
+            <!-- MONITOR -->
+            {% for usuario in usuarios %}
 
-                    {% if usuario.grupo == grupo and usuario.tipo == 'monitor' %}
+                {% if usuario.grupo == grupo and usuario.tipo == 'monitor' %}
 
-                        <div class="monitor">
-
-                            <div class="monitor-left">
-
-                                <div class="monitor-avatar">
-                                    {{ usuario.nome|first|upper }}
-                                </div>
-
-                                <div>
-                                    <div class="monitor-nome">{{ usuario.nome }}</div>
-                                    <div class="monitor-info">
-                                        📞 {{ usuario.telefone }}<br>
-                                        ✉️ {{ usuario.email }}
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <span class="monitor-badge">Monitor</span>
-
+                    <div class="monitor">
+                        <div class="monitor-nome">{{ usuario.nome }}</div>
+                        <div class="monitor-info">
+                            📞 {{ usuario.telefone }} <br>
+                            ✉️ {{ usuario.email }}
                         </div>
+                    </div>
+
+                {% endif %}
+
+            {% endfor %}
+
+            <!-- WHATSAPP (READ ONLY) -->
+            <div class="whatsapp-dropdown">
+
+                <button class="whatsapp-btn" onclick="toggleWhatsapp(this)">
+                    💬 WhatsApp ▾
+                </button>
+
+                <div class="whatsapp-content">
+
+                    {% if grupo.whatsapp_link %}
+
+                        <a href="{{ grupo.whatsapp_link }}" target="_blank">
+                            Entrar no grupo do WhatsApp
+                        </a>
+
+                    {% else %}
+
+                        <span class="whatsapp-empty">
+                            Grupo ainda não possui link
+                        </span>
 
                     {% endif %}
 
-                {% endfor %}
-
-                <!-- INTEGRANTES -->
-                <h3 style="margin-top:15px;color:#1f2f4a;">Integrantes:</h3>
-
-                {% for usuario in usuarios %}
-
-                    {% if usuario.grupo == grupo and usuario.tipo == 'integrante' %}
-
-                        <div class="membro">
-
-                            <strong>{{ usuario.nome }}</strong>
-
-                            <div class="info">
-                                Matrícula: {{ usuario.matricula }} <br>
-                                Período: {{ usuario.periodo }}
-                            </div>
-
-                        </div>
-
-                    {% endif %}
-
-                {% endfor %}
-
-                <p class="contador">
-                    Total de membros: {{ grupo.usuario_set.count }}/5
-                </p>
+                </div>
 
             </div>
 
+            <!-- INTEGRANTES -->
+            <h3 style="margin-top:15px;color:#1f2f4a;">Integrantes:</h3>
+
+            {% for usuario in usuarios %}
+
+                {% if usuario.grupo == grupo and usuario.tipo == 'integrante' %}
+
+                    <div class="membro">
+
+                        <strong>{{ usuario.nome }}</strong>
+
+                        <div class="info">
+                            Matrícula: {{ usuario.matricula }} <br>
+                            Período: {{ usuario.periodo }}
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            {% endfor %}
+
+            <p class="contador">
+                Total de membros: {{ grupo.usuario_set.count }}/5
+            </p>
+
+        </div>
+
+    {% endfor %}
+
+</div>
+
+<!-- SEM GRUPO -->
+<div class="sem-grupo-grid">
+
+    <div class="sem-grupo-bloco sem-grupo-integrante">
+
+        <h2>Integrantes sem grupo</h2>
+
+        {% for usuario in sem_grupo %}
+            {% if usuario.tipo == 'integrante' %}
+                <div class="sg-item sg-item-integrante">
+                    {{ usuario.nome }}
+                </div>
+            {% endif %}
+        {% empty %}
+            <p class="empty">Todos possuem grupo.</p>
         {% endfor %}
 
     </div>
 
-    <!-- SEM GRUPO — separado por tipo -->
-    <div class="sem-grupo-grid">
+    <div class="sem-grupo-bloco sem-grupo-monitor">
 
-        <!-- Integrantes sem grupo -->
-        <div class="sem-grupo-bloco sem-grupo-integrante">
+        <h2>Monitores sem grupo</h2>
 
-            <h2>
-                Integrantes sem grupo
-                <span class="sg-badge sg-badge-integrante">aguardando monitor</span>
-            </h2>
-
-            {% for usuario in sem_grupo %}
-                {% if usuario.tipo == 'integrante' %}
-                    <div class="sg-item sg-item-integrante">
-                        <span class="sg-dot-integrante"></span>
-                        {{ usuario.nome }}
-                    </div>
-                {% endif %}
-            {% empty %}
-                <p class="empty">Todos possuem grupo.</p>
-            {% endfor %}
-
-        </div>
-
-        <!-- Monitores sem grupo -->
-        <div class="sem-grupo-bloco sem-grupo-monitor">
-
-            <h2>
-                Monitores sem grupo
-                <span class="sg-badge sg-badge-monitor">sem atribuição</span>
-            </h2>
-
-            {% for usuario in sem_grupo %}
-                {% if usuario.tipo == 'monitor' %}
-                    <div class="sg-item sg-item-monitor">
-                        <span class="sg-dot-monitor"></span>
-                        {{ usuario.nome }}
-                    </div>
-                {% endif %}
-            {% empty %}
-                <p class="empty">Todos possuem grupo.</p>
-            {% endfor %}
-
-        </div>
+        {% for usuario in sem_grupo %}
+            {% if usuario.tipo == 'monitor' %}
+                <div class="sg-item sg-item-monitor">
+                    {{ usuario.nome }}
+                </div>
+            {% endif %}
+        {% empty %}
+            <p class="empty">Todos possuem grupo.</p>
+        {% endfor %}
 
     </div>
+
+</div>
+
+<script>
+function toggleWhatsapp(btn){
+    const box = btn.nextElementSibling;
+    box.style.display = (box.style.display === "block") ? "none" : "block";
+}
+</script>
 
 </body>
 </html>

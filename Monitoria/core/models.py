@@ -13,6 +13,9 @@ class Grupo(models.Model):
         related_name='grupos_monitorados'
     )
 
+    # ✅ CAMPO NOVO DO WHATSAPP
+    whatsapp_link = models.URLField(blank=True, null=True)
+
     def __str__(self):
         return f"Grupo {self.numero}"
 
@@ -25,16 +28,9 @@ class Usuario(AbstractUser):
     ]
 
     PERIODOS = [
-        ('1', '1'),
-        ('2', '2'),
-        ('3', '3'),
-        ('4', '4'),
-        ('5', '5'),
-        ('6', '6'),
-        ('7', '7'),
-        ('8', '8'),
-        ('9', '9'),
-        ('10', '10'),
+        ('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'),
+        ('5', '5'), ('6', '6'), ('7', '7'), ('8', '8'),
+        ('9', '9'), ('10', '10'),
     ]
 
     telefone_validator = RegexValidator(
@@ -43,30 +39,18 @@ class Usuario(AbstractUser):
     )
 
     nome = models.CharField(max_length=100)
+    matricula = models.CharField(max_length=20, unique=True)
 
-    matricula = models.CharField(
-        max_length=20,
-        unique=True
-    )
+    periodo = models.CharField(max_length=2, choices=PERIODOS)
 
-    periodo = models.CharField(
-        max_length=2,
-        choices=PERIODOS
-    )
-
-    email = models.EmailField(
-        unique=True
-    )
+    email = models.EmailField(unique=True)
 
     telefone = models.CharField(
         max_length=20,
         validators=[telefone_validator]
     )
 
-    tipo = models.CharField(
-        max_length=20,
-        choices=TIPOS
-    )
+    tipo = models.CharField(max_length=20, choices=TIPOS)
 
     grupo = models.ForeignKey(
         Grupo,

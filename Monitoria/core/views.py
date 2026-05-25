@@ -25,35 +25,22 @@ def home(request):
             if quantidade >= 5:
 
                 return render(request, 'index.html', {
-
                     'grupos': grupos,
-
                     'erro': 'Esse grupo já possui 5 integrantes.'
                 })
 
         usuario = Usuario(
-
-            username = request.POST.get('matricula'),
-
-            nome = request.POST.get('nome'),
-
-            matricula = request.POST.get('matricula'),
-
-            periodo = request.POST.get('periodo'),
-
-            email = request.POST.get('email'),
-
-            telefone = request.POST.get('telefone'),
-
-            tipo = request.POST.get('tipo'),
-
-            grupo = grupo
+            username=request.POST.get('matricula'),
+            nome=request.POST.get('nome'),
+            matricula=request.POST.get('matricula'),
+            periodo=request.POST.get('periodo'),
+            email=request.POST.get('email'),
+            telefone=request.POST.get('telefone'),
+            tipo=request.POST.get('tipo'),
+            grupo=grupo
         )
 
-        usuario.set_password(
-            request.POST.get('senha')
-        )
-
+        usuario.set_password(request.POST.get('senha'))
         usuario.save()
 
         if usuario.tipo == 'monitor':
@@ -68,39 +55,23 @@ def home(request):
 
 def painel(request):
 
-    usuarios = Usuario.objects.all()
-
-    grupos = Grupo.objects.all().order_by('numero')
-
-    sem_grupo = Usuario.objects.filter(grupo=None)
-
-    monitores = Usuario.objects.filter(tipo='monitor')
-
     return render(request, 'painel.html', {
-
-        'usuarios': usuarios,
-
-        'grupos': grupos,
-
-        'sem_grupo': sem_grupo,
-
-        'monitores': monitores
+        'usuarios': Usuario.objects.all(),
+        'grupos': Grupo.objects.all().order_by('numero'),
+        'sem_grupo': Usuario.objects.filter(grupo=None),
+        'monitores': Usuario.objects.filter(tipo='monitor')
     })
 
 
 def monitor(request):
 
     usuario = request.user
-
     grupos = Grupo.objects.all().order_by('numero')
-
     meus_grupos = usuario.grupos_monitorados.all()
 
-    grupos_sem_monitor = []
-
-    for grupo in grupos:
-        if not grupo.monitores.exists():
-            grupos_sem_monitor.append(grupo)
+    grupos_sem_monitor = [
+        g for g in grupos if not g.monitores.exists()
+    ]
 
     integrantes_sem_grupo = Usuario.objects.filter(
         tipo='integrante',
@@ -114,13 +85,13 @@ def monitor(request):
         ).count()
 
     return render(request, 'monitor.html', {
-
         'usuario': usuario,
         'meus_grupos': meus_grupos,
         'grupos_sem_monitor': grupos_sem_monitor,
         'integrantes_sem_grupo': integrantes_sem_grupo,
-        'grupos': grupos,  # 👈 importante agora
+        'grupos': grupos,
     })
+
 
 def login_view(request):
 
@@ -128,17 +99,13 @@ def login_view(request):
 
     if request.method == 'POST':
 
-        matricula = request.POST.get('matricula')
-
-        senha = request.POST.get('senha')
-
         usuario = authenticate(
             request,
-            username=matricula,
-            password=senha
+            username=request.POST.get('matricula'),
+            password=request.POST.get('senha')
         )
 
-        if usuario is not None:
+        if usuario:
 
             login(request, usuario)
 
@@ -147,18 +114,15 @@ def login_view(request):
 
             return redirect('/painel')
 
-        else:
-            erro = 'Matrícula ou senha inválidas'
+        erro = 'Matrícula ou senha inválidas'
 
-    return render(request, 'login.html', {
-        'erro': erro
-    })
+    return render(request, 'login.html', {'erro': erro})
+
 
 def logout_view(request):
-
     logout(request)
-
     return redirect('/login')
+
 
 def entrar_grupo(request, grupo_id):
 
@@ -166,14 +130,10 @@ def entrar_grupo(request, grupo_id):
 
         grupo = Grupo.objects.get(id=grupo_id)
 
-        possui_monitor = grupo.monitores.exists()
-
-        if not possui_monitor:
+        if not grupo.monitores.exists():
 
             grupo.monitores.add(request.user)
-
             request.user.tipo = 'monitor'
-
             request.user.save()
 
     return redirect('/monitor')
@@ -182,7 +142,6 @@ def entrar_grupo(request, grupo_id):
 def sair_grupo(request, grupo_id):
 
     grupo = Grupo.objects.get(id=grupo_id)
-
     grupo.monitores.remove(request.user)
 
     return redirect('/monitor')
@@ -191,21 +150,47 @@ def sair_grupo(request, grupo_id):
 def adicionar_integrante(request, usuario_id, grupo_id):
 
     usuario = Usuario.objects.get(id=usuario_id)
-
     grupo = Grupo.objects.get(id=grupo_id)
 
-    usuario.grupo = grupo
+    if request.user.tipo != 'monitor':
+        return redirect('/monitor')
 
+    qtd = Usuario.objects.filter(
+        grupo=grupo,
+        tipo='integrante'
+    ).count()
+
+    if qtd >= 5:
+        return redirect('/monitor')
+
+    usuario.grupo = grupo
     usuario.save()
 
     return redirect('/monitor')
+
 
 def remover_integrante(request, usuario_id):
 
     usuario = Usuario.objects.get(id=usuario_id)
-
     usuario.grupo = None
-
     usuario.save()
 
     return redirect('/monitor')
+
+
+# ✅ SALVAR WHATSAPP (CORRIGIDO)
+def salvar_whatsapp(request, grupo_id):
+
+    if request.method == "POST":
+
+        grupo = Grupo.objects.get(id=grupo_id)
+
+        if request.user.tipo != "monitor":
+            return redirect("/monitor")
+
+        link = request.POST.get("whatsapp_link")
+
+        grupo.whatsapp_link = link
+        grupo.save()
+
+    return redirect("/monitor")

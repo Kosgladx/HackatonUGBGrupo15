@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.urls import path
+from core import views
 
 from core.views import (
     home,
@@ -34,13 +35,13 @@ urlpatterns = [
         sair_grupo
     ),
 
-    path(
-        'adicionar-integrante/<int:usuario_id>/<int:grupo_id>/', 
-        adicionar_integrante
-    ),
+    path('adicionar-integrante/<int:usuario_id>/<int:grupo_id>/', 
+        views.adicionar_integrante),
 
     path(
         'remover-integrante/<int:usuario_id>/',
         remover_integrante
     ),
+
+    path('salvar-whatsapp/<int:grupo_id>/', views.salvar_whatsapp),
 ]
